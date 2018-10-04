@@ -1,0 +1,132 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Shuttle Booking System</title>
+  <!-- JQuery Libs -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <!-- Bootstrap -->
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <form id="distance_form">
+          <div class="form-group">
+            <label>Origin: </label>
+            <input  id="from_places" class="form-control" placeholder="Enter a location" />
+            <input id="origin" type="hidden" name="origin" required/>
+           </div>
+
+            <div class="form-group">
+              <label>Destination: </label>
+              <input  id="to_places" class="form-control" placeholder="Enter a location" />
+              <input id="destination" type="hidden" name="destination" required/>
+           </div>
+
+              <div class="row">
+                <div class='col-sm-6'>
+                  <br><label>Pick Up Date/Time: </label>
+                  <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                      <input type='text' class="form-control" />
+                      <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input type="submit" value="Calculate" class="btn btn-primary"/>
+          </form>
+
+              <div id="result">
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Distance (km):
+                    <span id='in_kilo' class="badge badge-primary badge-pill"></span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Fare ($NZD):
+                    <span id="fare_nzd" class="badge badge-primary badge-pill"></span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    IN TEXT:
+                    <span id="duration_text" class="badge badge-primary badge-pill"></span>
+                  </li>
+                  <!-- <li  class="list-group-item d-flex justify-content-between align-items-center">
+                    IN MINUTES:
+                    <span id="duration_value" class="badge badge-primary badge-pill"></span>
+                    </li> -->
+
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    FROM:
+                    <span id="from" class="badge badge-primary badge-pill"></span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    TO:
+                    <span id="to" class="badge badge-primary badge-pill"></span>
+                  </li>
+                </ul>
+                <form>
+                  <input type="button" value="Book Now" onclick="msg()" class="btn btn-primary">
+                </form>
+              </div>
+
+              <!-- stripe form  -->
+              <form action="/pay" method="post" id="payment-form">
+                <fieldset>
+                  <div class="row">
+                    <label>Name</label>
+                    <input type="text" name="customer_name" placeholder="customer name" />
+                    <label>Email</label>
+                    <input type="text" name="customer_email" placeholder="customer email" />
+                    </div>
+                    <div class="row">
+                    <label>Mobile</label>
+                    <input type="text" name="customer_phone" placeholder="Mobile Phone" />
+                    <label>Address</label>
+                    <input type="textarea" name="customer_address" placeholder="customer Address" />
+                    </div>
+                  <div id="card-element"> </div>
+                  <button type="submit" name="submit" class="submit action-button">Pay shuttle service</button>
+
+                </fieldset>
+              </form>
+              <!-- Scripts Section -->
+              <!-- Stripe Library -->
+              <!-- <script type="text/javascript" src="js/stripecc.js"></script> -->
+              <script src="https://js.stripe.com/v3/"></script>
+              <script src="js/stripecc.js"></script>
+              <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
+
+              <!-- Moment JS to manage Dates -->
+              <!-- <script type="text/javascript" src="js/moment.js"></script> -->
+              <!-- <script "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script> -->
+              <script type="text/javascript" src="https://momentjs.com/downloads/moment.min.js" ></script>
+              <!-- Bootstrap -->
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+              <link rel="stylesheet" href="css/styles.css" id="bootstrap-css">
+              <!-- DatePicker JQuery -->
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+              <!-- section of imports for the multi-step form -->
+
+              <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
+              <script src="js/index.js"></script>
+              <!-- Google Maps Library -->
+              <script defer src="https://maps.googleapis.com/maps/api/js?libraries=places&language=en&key=AIzaSyDaqml-GXgNO5R6nO4g3X78HNjJ7TqeUPo" type="text/javascript"></script>
+              <script type="text/javascript" src="js/maps.js"></script>
+              <!-- <div class="cognito">
+                      <form>
+                        <input type="button" value="Book Now" class="btn btn-primary" onclick="send_fare();"/>
+                      </form>
+                      <p id="final_fare"></p>
+                      <script src="https://services.cognitoforms.com/s/Ly2VJ20R40uD_9XkM3BRAA"></script>
+                      <script>Cognito.load("forms", { id: "1" });</script>
+                    </div> -->
+</body>
+
+</html>

@@ -106,5 +106,5 @@ function renderView(ctx) {
 
 module.exports = fromExpress(app);
 
-
-//private Key: sk_test_90mDtHmeub76YWkaHyUc2Feh
+//stripe_private_api_key: sk_test_90mDtHmeub76YWkaHyUc2Feh
+//access/FWSailesh
