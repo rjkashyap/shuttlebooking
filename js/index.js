@@ -123,8 +123,34 @@ $(".confirmBooking").click(function(){
 		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
-});
+});//end of confirmBooking event action
 
-$(".pay").click(function(){
-	return false;
+$("#add-order").click(function(){
+	//perform the POST call to create the order
+	// var order = {
+	// 	email: 'aleon1220@mail.com',
+  // 	attributes: [
+  //   	"flat of Matet",
+  //   	"Auckland Airport"
+  // 	]
+	// };
+	var url = 'https://wt-d749cf576d85c30c2e189db327f4a390-0.sandbox.auth0-extend.com/wt-book-shuttle';
+	var order = JSON.stringify({  "email": "aleon1220@mail.com",  "attributes": [    "house of Matet",    "Auckland Airport"  ]});
+	console.log("show order before POST"+order);
+	$.post(url, order, function (data, status) {
+	  alert("Ajax post status is " + status);
+	  alert(data);
+	});
+
+	// $.ajax({
+	// 	type: 'POST',
+	// 	url: 'https://wt-d749cf576d85c30c2e189db327f4a390-0.sandbox.auth0-extend.com/wt-book-shuttle',
+	// 	data: order,
+	// 	sucess: function(newOrder){
+	// 		console.log("successfully created order in Stripe");
+	// 	},
+	// 	error:function(){
+	// 		alert('some problems on REST invocation');
+	// 	}
+	// });
 })
