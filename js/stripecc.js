@@ -3,7 +3,6 @@ var stripe = Stripe('pk_test_HE1s14IaKi3E336JKWbWvjWP');
 
 // Create an instance of Elements.
 var elements = stripe.elements();
-
 // Custom styling can be passed to options when creating an Element.
 // (Note that this demo uses a wider set of styles than the guide below.)
 var style = {
@@ -24,7 +23,7 @@ var style = {
 };
 
 // Create an instance of the card Element.
-var card = elements.create('card', {style: style});
+var card = elements.create('card', { hidePostalCode : true, style: style });
 
 // Add an instance of the card Element into the `card-element` <div>.
 card.mount('#card-element');
@@ -55,29 +54,3 @@ form.addEventListener('submit', function(event) {
     }
   });
 });
-
-//this section invokes the Web-task microservices to handle the create order and finalize Payment
-
-// based on https://www.youtube.com/watch?v=12iA-xSuM4E&t=1s
-// AND
-// https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-
-function createOrderStripe() {
-  alert("this should trigger the booking form and create an order in stripe later");
-  console.log('bookOrderStripe created');
-
-var url = 'https://example.com/profile';
-var data = {username: 'example'};
-
-consportOrder = fetch(url, {
-  method: 'POST', // or 'PUT'
-  body: JSON.stringify(data), // data can be `string` or {object}!
-  headers:{
-    'Content-Type': 'application/json'
-  }
-})
-consportOrder
-    .then(res => res.json())
-    .then(response => console.log('Success:', JSON.stringify(response)))
-    .catch(error => console.error('Error:', error));
-}

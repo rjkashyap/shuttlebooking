@@ -2,13 +2,16 @@
 // google.maps.event.addDomListener(window, 'load', function() {
 //   //text in notepad was here
 // });
+
 $( document ).ready(function() {
 
   google.maps.event.addDomListener(window, 'load', initMap());
 
   function initMap() {
+
     var mapOptions = {
       zoom: 10,
+      //restricts to NZ only
       componentRestrictions: {
         country: "nz"
       },
@@ -118,4 +121,4 @@ $('#distance_form').submit(function() {
   calculateDistance();
   console.log("has invoked calculateDistance()");
 });
-});
+});//end of jQuery exec
