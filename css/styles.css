@@ -25,6 +25,11 @@
   background-color: #fefde5 !important;
 }
 
+.calculateButton{
+      visibility: hidden;
+      opacity: 1;
+}
+
 /**
  * Section for the form. Multi-step Form
  * how you can use CSS to style your Element's container. thanks to this nice developer

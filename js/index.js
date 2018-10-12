@@ -1,6 +1,7 @@
 //jQuery time
-
-$(function() {
+var fare, distanceKM, trip_duration;
+//$(function() { //the next line is just jQuery short-hand for $(function() {
+  $(document).ready(function() {
   // add input listeners
   google.maps.event.addDomListener(window, 'load', function() {
     // var autocomplete = new google.maps.places.Autocomplete(input);
@@ -12,10 +13,16 @@ $(function() {
     //     // Specify only the data fields that are needed.
     //     autocomplete.setFields(
     //         ['address_components', 'geometry', 'icon', 'name']);
+    //restricts to NZ only
+    var options = {
+      componentRestrictions: {
+        country: 'nz'
+      }
+    };
     var original = document.getElementById('from_places');
     var destiny = document.getElementById('to_places');
-    var from_places = new google.maps.places.Autocomplete(original).setComponentRestrictions({'country': ['nz'] });
-    var to_places = new google.maps.places.Autocomplete(destiny).setComponentRestrictions({'country': ['nz'] });
+    var from_places = new google.maps.places.Autocomplete(original, options);
+    var to_places = new google.maps.places.Autocomplete(destiny, options);
     google.maps.event.addListener(from_places, 'place_changed', function() {
       var from_place = from_places.getPlace();
       var from_address = from_place.formatted_address;
@@ -29,22 +36,21 @@ $(function() {
   });
   // calculate distance
   function calculateDistance() {
+    console.log("inside calculateDistance()");
     var origin = $('#origin').val();
     var destination = $('#destination').val();
     var service = new google.maps.DistanceMatrixService();
+    console.log("before call back GoogleMaps");
     service.getDistanceMatrix({
       origins: [origin],
       destinations: [destination],
-      //restricts to NZ only
-      componentRestrictions: {
-        country: "nz"
-      },
       travelMode: google.maps.TravelMode.DRIVING,
       // unitSystem: google.maps.UnitSystem.IMPERIAL, // miles and feet.
       unitSystem: google.maps.UnitSystem.metric, // kilometers and meters.
       avoidHighways: false,
       avoidTolls: false
     }, callback);
+    console.log("after call back GoogleMaps");
   }
   // get distance results
   function callback(response, status) {
@@ -58,13 +64,17 @@ $(function() {
       } else {
         var distance = response.rows[0].elements[0].distance;
         var duration = response.rows[0].elements[0].duration;
-        console.log(response.rows[0].elements[0].distance);
-        var distance_in_kilo = distance.value / 1000; // the kilom
         var fare_calc = (distance.value / 1000) * 3; // the mile
+        console.log(response.rows[0].elements[0].distance);
+        var distance_in_kilo = distance.value / 1000; // the kilometers
+        fare = fare_calc.toFixed(2);
+        distanceKM = distance_in_kilo.toFixed(2);
         var duration_text = duration.text;
         var duration_value = duration.value;
-        $('#fare_nzd').text(fare_calc.toFixed(2));
-        $('#in_kilo').text(distance_in_kilo.toFixed(2));
+        trip_duration = duration.text;
+        //return the values to the form after the callback
+        $('#fare_nzd').text(fare);
+        $('#in_kilo').text(distanceKM);
         $('#duration_text').text(duration_text);
         $('#duration_value').text(duration_value);
         $('#from').text(origin);
@@ -72,30 +82,94 @@ $(function() {
       }
     }
   }
-  // print results on submit the form
-  $('#distance_form').submit(function(e) {
-    e.preventDefault();
+  // // print results on submit the form
+  // $('#distance_form').submit(function(e) {
+  //   e.preventDefault();
+  // });
+  $("#bookNow").click(function() {
+    $("#bookNow").hide();
     calculateDistance();
+    $("#newBooking").css("visibility", "visible");
+    $("#newBooking").show();
+    // resultSection = document.getElementById("msform");
+    // e.preventDefault();
+    // resultSection.style.display = "block";
+    // return false;
+  });
+  $("#newBooking").click(function() {
+    location.reload();
+    $("#bookNow").show();
+    $("#newBooking").hide();
+    //$("#calculateInput").load(location.href+" #calculateInput>*","");
+
+    // resultSection = document.getElementById("msform");
+    // e.preventDefault();
+    // resultSection.style.display = "block";
+    // return false;
   });
 });
+
+$('#datetimepicker1').datetimepicker();
 
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
-$('#datetimepicker1').datetimepicker();
+$(".next").click(function() {
+  next();
+});
 
-$("#bookNow").click(function(e) {
-  alert("this method");
-  // resultSection = document.getElementById("msform");
-  // e.preventDefault();
-  // resultSection.style.display = "block";
-  // return false;
-})
+function next(){
+  // TODO: future imprivement generalize the Next function.
+}
+
+$(".nextSummary").click(function() {
+  if (animating) return false;
+  animating = true;
+  current_fs = $(this).parent();
+  next_fs = $(this).parent().next();
+
+  //activate next step on progressbar using the index of next_fs
+  $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+  //show the next fieldset
+  next_fs.show();
+  //hide the current fieldset with style
+  current_fs.animate({
+    opacity: 0
+  }, {
+    step: function(now, mx) {
+      //as the opacity of current_fs reduces to 0 - stored in "now"
+      //1. scale current_fs down to 80%
+      scale = 1 - (1 - now) * 0.2;
+      //2. bring next_fs from the right(50%)
+      left = (now * 50) + "%";
+      //3. increase opacity of next_fs to 1 as it moves in
+      opacity = 1 - now;
+      current_fs.css({
+        'transform': 'scale(' + scale + ')',
+        'position': 'absolute'
+      });
+      next_fs.css({
+        'left': left,
+        'opacity': opacity
+      });
+    },
+    duration: 800,
+    complete: function() {
+      current_fs.hide();
+      animating = false;
+    },
+    //this comes from the custom easing plugin
+    easing: 'easeInOutBack'
+  });
+  showSummary();
+});
 
 $(".next").click(function() {
   if (animating) return false;
   animating = true;
+  console.log("inside next()");
 
   current_fs = $(this).parent();
   next_fs = $(this).parent().next();
@@ -176,6 +250,27 @@ $(".previous").click(function() {
     easing: 'easeInOutBack'
   });
 });
+
+function showSummary(){
+console.log("showing fare, distanceKM, duration_text, duration_value: " + fare, distanceKM, trip_duration);
+// Date and Time of Service:
+$("#dateTimeService").text($(datetimepick).val());
+// Destination From:
+$('#originSummary').text($("#origin").val()); ;
+// Origin To:
+$('#destinySummary').text($(destination).val());
+// No of Passengers:
+$('#noPassengersSummary').text( $(selectedPassengers).val() );
+// Checked Luggage:
+$("#checkedLuggageSummary").text( $(selectedLuggage).val() );
+// Distance in KM:
+//$('#in_kilo').text(distanceKM);
+$('#distanceSummary').text(distanceKM);
+// Fare:
+$("#fareSummary").text(fare);
+// Estimated Duration:
+$('#durationSummary').text(trip_duration);
+} //end of showSummary()
 
 // Create a Stripe client.
 var stripe = Stripe('pk_test_HE1s14IaKi3E336JKWbWvjWP');
@@ -347,7 +442,6 @@ form.addEventListener('submit', function(event) {
 });
 
 function payOrderStripe(orderId, token) {
-  var paymentURL = 'https://wt-d749cf576d85c30c2e189db327f4a390-0.sandbox.auth0-extend.com/wt-stripe-payment';
   // var payToken = token;
   // var order = orderId;
   var payment = JSON.stringify({
@@ -357,10 +451,24 @@ function payOrderStripe(orderId, token) {
   console.log("Payment Method Invoking with Ids: " + orderId, token.id);
   console.log("JSON representation of stripe payment token:" + JSON.stringify(token));
   console.log("payment object to be sent to WT in JSON:" + payment);
-  $.post(paymentURL, payment, function(data) {
-    console.log("executing POST call");
-    //console.log("show order Payment in POST method:"+JSON.stringify(data));
-    //console.log("prints status"+ status);
-    //alert("Ajax post status is " + status);
-  }, "json");
+  var paymentURL = 'https://wt-d749cf576d85c30c2e189db327f4a390-0.sandbox.auth0-extend.com/wt-stripe-payment';
+  var myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
+  const options = {
+                  method: 'POST',
+                  headers: myHeaders,
+                  body: payment
+                  };
+  console.log("executing call with fetch");
+  console.log("options"+JSON.stringify(options));
+  fetch( paymentURL, options )
+    .then(response => response.json())
+    .then(posts => console.log("printing JSON result from MSA"+JSON.stringify(posts)));
+
+  // $.post(paymentURL, payment, function(data) {
+  //   console.log("executing POST call");
+  //   //console.log("show order Payment in POST method:"+JSON.stringify(data));
+  //   //console.log("prints status"+ status);
+  //   //alert("Ajax post status is " + status);
+  // }, "json");
 }

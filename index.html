@@ -23,44 +23,80 @@
           <li>Payment details</li>
         </ul>
         <!-- fieldsets -->
-        <fieldset>
+        <fieldset id="fieldsetRoute">
           <h2 class="fs-title">Calculate shuttle Route</h2>
-          <h3 class="fs-subtitle">This is step 1</h3>
-          <div class="form-group">
-            <label>Origin: </label>
-            <input id="from_places" class="form-control" placeholder="Enter a location" />
-            <input id="origin" type="hidden" name="origin" required />
-          </div>
-          <div class="form-group">
-            <label> Destination: </label>
-            <input id="to_places" class="form-control" placeholder="Enter a location" />
-            <input id="destination" type="hidden" name="destination" required />
-          </div>
-          <div class="form-group">
-            <label>Pick Up Date/Time: </label>
-            <div class='input-group date' id='datetimepicker1'>
-              <input type='text' class="form-control" />
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-              </span>
+          <h3 class="fs-subtitle">Enter origin and destination to calculate the price</h3>
+
+          <div id="calculateInput">
+            <div class="form-group">
+              <label>Origin: </label>
+              <input id="from_places" class="form-control" placeholder="Enter a location" />
+              <input id="origin" type="hidden" name="origin" required />
+            </div>
+            <div class="form-group">
+              <label> Destination: </label>
+              <input id="to_places" class="form-control" placeholder="Enter a location" />
+              <input id="destination" type="hidden" name="destination" required />
+            </div>
+            <div class="form-group">
+              <label>Pick Up Date/Time: </label>
+              <div class="input-group date" id='datetimepicker1'>
+                <input id="datetimepick" type='text' class="form-control" />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-5">
+                <label for="colFormLabel">Passengers</label>
+                <div class="col-sm-7">
+                  <select id="selectedPassengers" class="form-control">
+                    <!-- <option>Bank/Poli</option> -->
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-sm-5">
+                <label for="colFormLabel">Checked Luggage</label>
+                <div class="col-sm-7">
+                  <select id="selectedLuggage" class="form-control">
+                    <!-- <option>Bank/Poli</option> -->
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <button type=“submit” id="bookNow" name="bookNow" class="btn btn-primary btn-lg">Calculate Route
+                <span class="glyphicon glyphicon-send"> </span>
+              </button>
+              <button type=“submit” id="newBooking" name="newbookNow" class="btn btn-primary btn-lg calculateButton">Calculate New Route
+                <span class="glyphicon glyphicon-log-out"> </span>
+              </button>
             </div>
           </div>
-          <input type="submit" value="Calculate" class="btn btn-primary btn-lg btn-block" />
-          <input type="text" name="customer_name" placeholder="customer name" />
-          <input type="text" name="customer_email" placeholder="Email" />
-          <input type="text" name="customer_phone" placeholder="Mobile Phone" />
-          <input type="textarea" name="address" placeholder="customer Address" />
-          <input type="button" name="next" class="next action-button" value="Next" />
-        </fieldset>
-        <fieldset>
-          <h2 class="fs-title">Summary Quote for a shuttle create a booking and send email</h2>
-          <h3 class="fs-subtitle">Details of Booking</h3>
+
           <div id="result" class="panel-body">
-            <!-- TODO:  -->Primary panel to do add stuff inside
+            <!-- TODO:  Primary panel to do add stuff inside -->
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th scope="col">description</th>
+                  <th scope="col">Description</th>
                   <th scope="col">Total</th>
                   <th scope="col"></th>
                 </tr>
@@ -88,8 +124,64 @@
                 </tr>
               </tbody>
             </table>
-            <button type=“submit” id="bookNow" name="bookNow" value="Book Now" class="btn btn-primary btn-lg btn-block" />Book Now </button>
           </div>
+
+        <button type="button" name="nextSummary" class="nextSummary btn btn-primary btn-lg" value="Next">Next
+          <span class="glyphicon glyphicon-arrow-right"> </span>
+        </button>
+      </fieldset>
+      <fieldset>
+          <h2 class="fs-title">Summary Quote for a shuttle create a booking and send email</h2>
+          <h3 class="fs-subtitle">Details for your Booking</h3>
+
+          <div id="summary">
+            <!-- TODO:  Primary panel to do add stuff inside -->
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Date and Time of Service:</th>
+                  <td colspan="2"> <span id="dateTimeService"></span> </span> </td>
+                </tr>
+                <tr>
+                  <th scope="row">Destination From:</th>
+                  <td colspan="2"> <span id="originSummary"></span> </span> </td>
+                </tr>
+                <tr>
+                  <th scope="row">Origin To: </th>
+                  <td colspan="2"> <span id="destinySummary"> </span> </td>
+                </tr>
+                <tr>
+                  <th scope="row">No of Passengers: </th>
+                  <td colspan="2"> <span id="noPassengersSummary"> </span> </td>
+                </tr>
+                <tr>
+                  <th scope="row">Checked Luggage: </th>
+                  <td colspan="2"> <span id="checkedLuggageSummary"> </span> </td>
+                </tr>
+                <tr>
+                  <th scope="row">Distance in KM:</th>
+                  <td colspan="2"><span id='distanceSummary'></span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Fare:</th>
+                  <td colspan="2"> <span id="fareSummary"> </span> </td>
+                </tr>
+                <tr>
+                  <th scope="row">Estimated Duration:</th>
+                  <td colspan="2"> <span id="durationSummary"></span> </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
           <!-- buttons for movement and interaction -->
           <input type="button" name="previous" class="previous action-button" value="Previous" />
           <!-- <button id="add-order" class="pay-button">Confirm Booking and Pay </button> -->
@@ -97,6 +189,10 @@
         </fieldset>
         <fieldset>
           <h2 class="fs-title">Customer Details for order Secured Payment</h2>
+          <input type="text" name="customer_name" placeholder="customer name" />
+          <input type="text" name="customer_email" placeholder="Email" />
+          <input type="text" name="customer_phone" placeholder="Mobile Phone" />
+          <input type="textarea" name="address" placeholder="customer Address" />
           <div class="form-group row">
             <label for="colFormLabel" class="col-sm-2 col-form-label">Payment Option</label>
             <div class="col-sm-10">
@@ -118,28 +214,28 @@
       </form>
     </div>
   </div><!-- end of container -->
-                                            <!-- Scripts Section -->
-                                            <!-- JQuery Libs -->
-<!-- Stripe Library <script type="text/javascript" src="js/stripecc.js"></script> -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<!-- Google Maps Library -->
-<!-- &callback=myMap -->
-<script  defer src="https://maps.googleapis.com/maps/api/js?libraries=places&language=en&key=AIzaSyDaqml-GXgNO5R6nO4g3X78HNjJ7TqeUPo" type="text/javascript"></script>
-<!-- <script src="https://maps.googleapis.com/maps/api/js?&key=AIzaSyDaqml-GXgNO5R6nO4g3X78HNjJ7TqeUPo&libraries=places" type="text/javascript"></script> -->
-<!-- <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script> -->
-<script src="https://js.stripe.com/v3/"></script>
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
-<!-- Moment JS to manage Dates -->
-<!-- <script type="text/javascript" src="js/moment.js"></script> -->
-<!-- <script "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script> -->
-<script type="text/javascript" src="https://momentjs.com/downloads/moment.min.js"></script>
-<!-- Bootstrap -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
-<!-- DatePicker JQuery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-<!-- section of imports for the multi-step form -->
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
-<script src="js/index.js"></script>
+  <!-- Scripts Section -->
+  <!-- JQuery Libs -->
+  <!-- Stripe Library <script type="text/javascript" src="js/stripecc.js"></script> -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <!-- Google Maps Library -->
+  <!-- &callback=myMap -->
+  <script src="https://maps.googleapis.com/maps/api/js?&key=AIzaSyDaqml-GXgNO5R6nO4g3X78HNjJ7TqeUPo&libraries=places"></script>
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?&key=AIzaSyDaqml-GXgNO5R6nO4g3X78HNjJ7TqeUPo&libraries=places" type="text/javascript"></script> -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script> -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
+  <!-- Moment JS to manage Dates -->
+  <!-- <script type="text/javascript" src="js/moment.js"></script> -->
+  <!-- <script "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script> -->
+  <script type="text/javascript" src="https://momentjs.com/downloads/moment.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <!-- DatePicker JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+  <!-- section of imports for the multi-step form -->
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
+  <script src="js/index.js"></script>
 </body>
 
 </html>
