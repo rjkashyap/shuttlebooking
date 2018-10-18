@@ -1,0 +1,40 @@
+/**
+* @param context {WebtaskContext}
+*/
+
+//import the latest version of stripe.js
+var stripe = require('stripe@4.14.0');
+
+module.exports = function(ctx, cb) {
+	//call Stripe API new order
+	stripe(ctx.secrets.stripe_private_api_key).orders.create({
+		//name: 'shuttle-service',
+   // caption: 'book-shuttle-service',
+   // active: 'true',
+    currency: 'nzd',
+	//email: ctx.body.email,
+		//metadata:{
+			//phone: ctx.body.phone
+		//},
+      items:[
+			{
+		type: 'sku',
+        parent: 'sku_DbRj1fg3TIs0PW',
+        Distance: ctx.body.distance,
+		Passenger: ctx.body.passenger,
+		Luggage: ctx.body.luggage
+        //origin: ctx.body.origin,
+		//destination: ctx.body.destination,
+			}
+		]
+		// shipping:{
+		// 		name: 'sku',
+		// 		address: {
+		// 			line1: ctx.body.address
+		// 		}
+		// }
+	}, function(err, order){
+		//return a new order Stripe's object created! asynchronous call
+		cb(null, {order: order || err});
+	});
+};

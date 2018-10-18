@@ -1,7 +1,7 @@
 //jQuery time
 var fare, distanceKM, trip_duration;
 //$(function() { //the next line is just jQuery short-hand for $(function() {
-  $(document).ready(function() {
+$(document).ready(function() {
   // add input listeners
   google.maps.event.addDomListener(window, 'load', function() {
     // var autocomplete = new google.maps.places.Autocomplete(input);
@@ -119,7 +119,7 @@ $(".next").click(function() {
   next();
 });
 
-function next(){
+function next() {
   // TODO: future imprivement generalize the Next function.
 }
 
@@ -251,25 +251,25 @@ $(".previous").click(function() {
   });
 });
 
-function showSummary(){
-console.log("showing fare, distanceKM, duration_text, duration_value: " + fare, distanceKM, trip_duration);
-// Date and Time of Service:
-$("#dateTimeService").text($(datetimepick).val());
-// Destination From:
-$('#originSummary').text($("#origin").val()); ;
-// Origin To:
-$('#destinySummary').text($(destination).val());
-// No of Passengers:
-$('#noPassengersSummary').text( $(selectedPassengers).val() );
-// Checked Luggage:
-$("#checkedLuggageSummary").text( $(selectedLuggage).val() );
-// Distance in KM:
-//$('#in_kilo').text(distanceKM);
-$('#distanceSummary').text(distanceKM);
-// Fare:
-$("#fareSummary").text(fare);
-// Estimated Duration:
-$('#durationSummary').text(trip_duration);
+function showSummary() {
+  console.log("showing fare, distanceKM, duration_text, duration_value: " + fare, distanceKM, trip_duration);
+  // Date and Time of Service:
+  $("#dateTimeService").text($(datetimepick).val());
+  // Destination From:
+  $('#originSummary').text($("#origin").val());;
+  // Origin To:
+  $('#destinySummary').text($(destination).val());
+  // No of Passengers:
+  $('#noPassengersSummary').text($(selectedPassengers).val());
+  // Checked Luggage:
+  $("#checkedLuggageSummary").text($(selectedLuggage).val());
+  // Distance in KM:
+  //$('#in_kilo').text(distanceKM);
+  $('#distanceSummary').text(distanceKM);
+  // Fare:
+  $("#fareSummary").text(fare);
+  // Estimated Duration:
+  $('#durationSummary').text(trip_duration);
 } //end of showSummary()
 
 // Create a Stripe client.
@@ -355,11 +355,13 @@ $(".confirmBooking").click(function() {
     //this comes from the custom easing plugin
     easing: 'easeInOutBack'
   });
-
+  //creates the order in stripe by invoking WebTask.
   var url = 'https://wt-d749cf576d85c30c2e189db327f4a390-0.sandbox.auth0-extend.com/wt-book-shuttle';
   var order = JSON.stringify({
-    "email": "aleon1220@mail.com",
-    "attributes": ["house of Matet", "Auckland Airport"]
+    "attributes": ["distance"   , distanceKM ,
+                   "passenger"  , $(selectedPassengers).val() ,
+                   "luggage"    , $(selectedLuggage).val()
+                  ]
   });
   console.log("show order before POST: " + order);
   $.post(url, order, function(data, status) {
@@ -373,7 +375,6 @@ $(".confirmBooking").click(function() {
       alert("error in POST request");
     })
     .always(function() {
-      alert("Shuttle Booking successfully created please perform payment");
     });
   // Perform other work here ...
 }); //end of confirmBooking event action
@@ -397,7 +398,7 @@ $(".confirmBooking").click(function() {
 //     .then(response => console.log('Success:', JSON.stringify(response)))
 //     .catch(error => console.error('Error:', error));
 // }
-$("#add-order").click(function() {
+//$("#add-order").click(function() {
   //perform the POST call to create the order
   // var order = {
   // 	email: 'aleon1220@mail.com',
@@ -417,7 +418,7 @@ $("#add-order").click(function() {
   // 		alert('some problems on REST invocation');
   // 	}
   // });
-});
+//});
 // Handle form submission.
 //for testing use card 4242 4242 4242 4242 which is a US card. refer to https://stripe.com/docs/testing#cards
 //NZ card: 4000005540000008
@@ -455,15 +456,15 @@ function payOrderStripe(orderId, token) {
   var myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
   const options = {
-                  method: 'POST',
-                  headers: myHeaders,
-                  body: payment
-                  };
+    method: 'POST',
+    headers: myHeaders,
+    body: payment
+  };
   console.log("executing call with fetch");
-  console.log("options"+JSON.stringify(options));
-  fetch( paymentURL, options )
+  console.log("options" + JSON.stringify(options));
+  fetch(paymentURL, options)
     .then(response => response.json())
-    .then(posts => console.log("printing JSON result from MSA"+JSON.stringify(posts)));
+    .then(posts => console.log("printing JSON result from MSA" + JSON.stringify(posts)));
 
   // $.post(paymentURL, payment, function(data) {
   //   console.log("executing POST call");

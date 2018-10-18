@@ -1,0 +1,16 @@
+/**
+* @param context {webtaskPayment}
+*/
+
+//import the latest version of stripe.js
+var stripe = require('stripe@4.14.0');
+
+module.exports = function(ctx, cb) {
+	//call Stripe API to pay the ordern. Pass the order Id and the credit Card Token (POST http request variables)
+	stripe(ctx.secrets.stripe_private_api_key).orders.pay(ctx.body.order.id, {
+		source: ctx.body.token
+  }, function (err, paid_order){
+    //return a new order Stripe's object payment process! asynchronous call.
+		cb(null, {paid_order: paid_order || err });
+  });
+};
