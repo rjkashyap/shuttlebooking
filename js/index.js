@@ -267,8 +267,9 @@ function showSummary() {
   //$('#in_kilo').text(distanceKM);
   $('#distanceSummary').text(distanceKM);
  
-  $('#Ticket').data('item-quantity',distanceKM );
-  alert("The data is changed."+distanceKM)
+ $('#Ticket').data('item-quantity',(distanceKM * $(selectedPassengers).val()) );
+ $('#Ticket').data('item-custom1-value',$(selectedPassengers).val())
+ $('#Ticket').data('item-custom2-value',distanceKM) 
   // Fare:
   $("#fareSummary").text(fare);
   // Estimated Duration:
