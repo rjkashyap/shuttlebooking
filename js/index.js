@@ -66,7 +66,7 @@ $(document).ready(function() {
         var duration = response.rows[0].elements[0].duration;
         var fare_calc = (distance.value / 1000) * 3; // the mile
         console.log(response.rows[0].elements[0].distance);
-        var distance_in_kilo = distance.value / 1000; // the kilometers
+        var distance_in_kilo = Math.ceil(distance.value / 1000); // the kilometers
         fare = fare_calc.toFixed(2);
         distanceKM = distance_in_kilo.toFixed(2);
         var duration_text = duration.text;
@@ -266,6 +266,9 @@ function showSummary() {
   // Distance in KM:
   //$('#in_kilo').text(distanceKM);
   $('#distanceSummary').text(distanceKM);
+  $('#distanceSummary').change(function() {
+    $('#Ticket').data('item-quantity',$(this).val() );
+});
   // Fare:
   $("#fareSummary").text(fare);
   // Estimated Duration:
